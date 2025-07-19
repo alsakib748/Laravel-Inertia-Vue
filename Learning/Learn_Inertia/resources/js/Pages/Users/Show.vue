@@ -25,6 +25,8 @@ defineProps({
 
         <div class="py-4">
 
+            {{ $page.props.greeting }} {{ $page.props.auth.user.name }}
+
             <!-- {{ user }}
             {{ posts }} -->
 

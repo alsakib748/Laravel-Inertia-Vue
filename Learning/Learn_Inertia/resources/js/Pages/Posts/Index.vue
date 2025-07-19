@@ -2,7 +2,7 @@
 
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, useForm, router, Link } from '@inertiajs/vue3';
+import { Head, useForm, router, Link, usePage } from '@inertiajs/vue3';
 
 // For retrieve data
 defineProps({
@@ -14,7 +14,7 @@ defineProps({
 
 const form = useForm({
     title: '',
-    body: '',
+    body: usePage().props.auth.user.name,
 });
 
 // Client Side Validation
@@ -50,6 +50,9 @@ const refreshPosts = () => {
     });
 }
 
+// todo: usePage() use to access globally data in script
+console.log(usePage().props.auth.user.name);
+
 </script>
 
 
@@ -70,6 +73,11 @@ const refreshPosts = () => {
         </template>
 
         <div class="py-4 mx-auto max-w-7xl sm:px-6 lg:px-8 ">
+
+            <!-- todo: $page Use to access anything in vue. It's Global -->
+            <!-- todo: $page use to access globally data in template -->
+            {{ $page.props.greeting }} {{ $page.props.auth.user.name }}
+
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg border border-500-gray my-3 p-4">
                 <form @submit.prevent="createPost" action="" method="">
                     <!-- debug -->
