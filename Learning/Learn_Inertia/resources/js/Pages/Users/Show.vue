@@ -13,11 +13,7 @@ defineProps({
 
 <template>
 
-    <Head title="Posts">
-
-        <meta name="description" content="Post Index" />
-
-    </Head>
+    <Head :title="user.name" />
 
     <AuthenticatedLayout>
 

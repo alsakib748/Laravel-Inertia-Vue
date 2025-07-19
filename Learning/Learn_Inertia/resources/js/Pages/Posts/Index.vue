@@ -109,9 +109,13 @@ const refreshPosts = () => {
                 </form>
 
                 <div class="text-center">
-                    <button @click="refreshPosts" type="button" class="text-sm text-indigo-600 text-center">
+                    <!-- <button @click="refreshPosts" type="button" class="text-sm text-indigo-600 text-center">
                         Refresh Posts
-                    </button>
+                    </button> -->
+                    <Link :href="route('posts')" class="text-sm text-indigo-600 text-center" preserve-scroll
+                        :only="['posts']">
+                    Refresh Posts
+                    </Link>
                 </div>
 
             </div>
@@ -130,10 +134,11 @@ const refreshPosts = () => {
                         </div>
                         <p class="text-right">
                             <!-- {{ post.user.name }} -->
-                            <!-- alternative of a:href in SPA -->
-                            <Link :href="route('user.show', post.user)" class="">
+                            <!-- todo: alternative of a:href in SPA -->
+                            <Link :href="route('user.show', post.user)" preserve-scroll class="">
                             {{ post.user.name }}
                             </Link>
+                            <!-- todo: Here use preserve-scroll because of stop default behavior to scroll up when click href and goes to antoher page -->
                         </p>
                     </div>
                 </div>
