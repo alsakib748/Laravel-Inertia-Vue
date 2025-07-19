@@ -14,6 +14,7 @@ class PostIndexController extends Controller
 
         return inertia()->render('Posts/Index', [
             'posts' => PostResource::collection(Post::with('user')->latest()->get()),
+            'now' => now(),
         ]);
 
         // return inertia()->render('Posts/Index');

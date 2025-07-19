@@ -2,7 +2,7 @@
 
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, useForm, router } from '@inertiajs/vue3';
 
 // For retrieve data
 defineProps({
@@ -41,6 +41,15 @@ const createPost = () => {
 
 };
 
+// when data store then it will be refresh and show data .when clicked
+const refreshPosts = () => {
+    router.get(route('posts'), {}, {
+        // show specific data after refresh
+        only: ['posts'],
+        preserveScroll: true,
+    });
+}
+
 </script>
 
 
@@ -66,8 +75,8 @@ const createPost = () => {
                     <!-- debug -->
                     <!-- {{ form }} -->
                     <!-- Another way to catch error. This is global validation -->
-                    {{ $page.props.errors.title }}
-                    {{ $page.props.errors.body }}
+                    <!-- {{ $page.props.errors.title }} -->
+                    <!-- {{ $page.props.errors.body }} -->
                     <div class="my-3">
                         <label for="" class="">Title</label>
                         <!-- N: It's Use to remove erros  @focus="form.clearErrors()" N: Use this for all errors remove when type input  -->
@@ -91,10 +100,20 @@ const createPost = () => {
                         </div>
                     </div>
                     <div class="my-3">
+                        <!-- todo: form.processing use when form submit, then it's will be disabled and opacity decrease -->
                         <button type="submit"
-                            class="bg-gray-700 px-4 py-2 rounded-md font-medium text-white hover:bg-indigo-500 hover:ring-indigo-600">Post</button>
+                            class="bg-gray-700 px-4 py-2 rounded-md font-medium text-white hover:bg-indigo-500 hover:ring-indigo-600"
+                            :disabled="form.processing" :class="{ 'opacity-50': form.processing }">Post
+                        </button>
                     </div>
                 </form>
+
+                <div class="text-center">
+                    <button @click="refreshPosts" type="button" class="text-sm text-indigo-600 text-center">
+                        Refresh Posts
+                    </button>
+                </div>
+
             </div>
         </div>
 
