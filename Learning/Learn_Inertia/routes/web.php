@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PostStoreController;
+use App\Http\Controllers\UserShowController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
@@ -22,6 +23,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/posts', PostIndexController::class)->name('posts');
 Route::post('/posts', PostStoreController::class);
+Route::get('/users/{user}', UserShowController::class)->name('user.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

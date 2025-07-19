@@ -2,7 +2,7 @@
 
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, useForm, router } from '@inertiajs/vue3';
+import { Head, useForm, router, Link } from '@inertiajs/vue3';
 
 // For retrieve data
 defineProps({
@@ -129,7 +129,11 @@ const refreshPosts = () => {
                             {{ post.body }}
                         </div>
                         <p class="text-right">
-                            Author: {{ post.user.name }}
+                            <!-- {{ post.user.name }} -->
+                            <!-- alternative of a:href in SPA -->
+                            <Link :href="route('user.show', post.user)" class="">
+                            {{ post.user.name }}
+                            </Link>
                         </p>
                     </div>
                 </div>
