@@ -21,8 +21,8 @@ class PostStoreController extends Controller
         // Validation
 
         $request->validate([
-            'title' => 'required|string|min:3|max:10',
-            'body' => 'required|string|min:5|max:20',
+            'title' => 'required|string|min:3|max:100',
+            'body' => 'required|string|min:5|max:255',
         ]);
 
         $request->user()->posts()->create([
@@ -31,7 +31,10 @@ class PostStoreController extends Controller
         ]);
         // todo: auth()->user() or $request->user()
 
-        return back()->with('success', 'Post create successfully');
+        return back()->with('message', [
+            'body' => 'Post create successfully',
+            'type' => 'success'
+        ]);
 
     }
 }

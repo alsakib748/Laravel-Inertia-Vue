@@ -3,6 +3,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm, router, Link, usePage } from '@inertiajs/vue3';
 import { useToast } from "vue-toastification";
+import { watch } from 'vue';
 
 // Get toast interface
 const toast = useToast();
@@ -18,6 +19,15 @@ defineProps({
 const form = useForm({
     title: '',
     body: usePage().props.auth.user.name,
+});
+
+const page = usePage();
+
+// todo: server side flash message receive here via usePage which are define HandleInertiaRequests to global access
+
+watch(() => page.props.message, (message) => {
+    // console.log(message);
+    toast(message.body, { type: message.type });
 });
 
 // Client Side Validation
@@ -39,9 +49,10 @@ const createPost = () => {
             // form.body = '';
             // or
             // toast("Post create successfully!");
-            toast.success("Post create successfully!", {
-                timeout: 2000
-            });
+            // todo: Client side toast message
+            // toast.success("Post create successfully!", {
+            //     timeout: 2000
+            // });
             form.reset();
 
         }
@@ -81,6 +92,8 @@ console.log(usePage().props.auth.user.name);
         </template>
 
         <div class="py-4 mx-auto max-w-7xl sm:px-6 lg:px-8 ">
+
+            <!-- {{ $page.props.message }} -->
 
             <!-- todo: $page Use to access anything in vue. It's Global -->
             <!-- todo: $page use to access globally data in template -->
