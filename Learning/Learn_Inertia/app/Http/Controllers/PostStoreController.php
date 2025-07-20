@@ -31,7 +31,7 @@ class PostStoreController extends Controller
         ]);
         // todo: auth()->user() or $request->user()
 
-        return back();
+        return back()->with('success', 'Post create successfully');
 
     }
 }

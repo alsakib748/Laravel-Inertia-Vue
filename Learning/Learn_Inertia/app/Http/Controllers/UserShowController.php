@@ -24,6 +24,7 @@ class UserShowController extends Controller
             // 'posts' => PostResource::collection($user->posts)
             // 'posts' => PostResource::collection(
             //     Post::with('user')->whereBelongsTo($user)->get(),
+            // todo: Lazy data
             'posts' => Inertia::lazy(function () use ($user) {
                 return PostResource::collection($user->posts);
             })

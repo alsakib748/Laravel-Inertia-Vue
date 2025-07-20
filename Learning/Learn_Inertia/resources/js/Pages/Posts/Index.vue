@@ -1,8 +1,11 @@
 <script setup>
 
-
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm, router, Link, usePage } from '@inertiajs/vue3';
+import { useToast } from "vue-toastification";
+
+// Get toast interface
+const toast = useToast();
 
 // For retrieve data
 defineProps({
@@ -35,7 +38,12 @@ const createPost = () => {
             // form.title = '';
             // form.body = '';
             // or
+            // toast("Post create successfully!");
+            toast.success("Post create successfully!", {
+                timeout: 2000
+            });
             form.reset();
+
         }
     });
 
