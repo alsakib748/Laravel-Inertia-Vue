@@ -129,6 +129,14 @@ console.log(usePage().props.auth.user.name);
             </div>
         </div>
 
+        <!-- <div class="">
+            <div class="text-center">
+                <button class="text-sm text-gray-100 text-center bg-orange-500 hover:bg-orange-400 rounded-md p-2">
+                    Show Posts
+                </button>
+            </div>
+        </div> -->
+
         <div class="py-4">
             <!-- {{ posts }} -->
             <div v-for="post in posts" :key="post.id" class="">

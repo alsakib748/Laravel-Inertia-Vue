@@ -3,10 +3,16 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm, router, Link } from '@inertiajs/vue3';
 
-defineProps({
+const props = defineProps({
     user: Object,
     posts: Object,
 });
+
+const showPosts = () => {
+    router.get(route('user.show', props.user), {}, {
+        only: ['posts'],
+    });
+};
 
 </script>
 
@@ -25,10 +31,19 @@ defineProps({
 
         <div class="py-4">
 
-            {{ $page.props.greeting }} {{ $page.props.auth.user.name }}
+            <!-- {{ $page.props.greeting }} {{ $page.props.auth.user.name }} -->
 
             <!-- {{ user }}
             {{ posts }} -->
+
+            <div class="">
+                <div class="text-center">
+                    <button @click="showPosts"
+                        class="text-sm text-gray-100 text-center bg-orange-500 hover:bg-orange-400 rounded-md p-2">
+                        Show Posts
+                    </button>
+                </div>
+            </div>
 
             <!-- {{ posts }} -->
             <div v-for="post in posts" :key="post.id" class="">
