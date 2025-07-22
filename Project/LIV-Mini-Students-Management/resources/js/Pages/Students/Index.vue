@@ -1,5 +1,5 @@
 <script setup>
-import { usePage } from "@inertiajs/vue3";
+import { usePage, Link } from "@inertiajs/vue3";
 import MagnifyingGlass from "@/Components/Icons/MagnifyingGlass.vue";
 import Pagination from "@/Components/Pagination.vue";
 
@@ -30,7 +30,7 @@ defineProps({
                 </div>
             </div>
 
-            <div class="px-4 py-2  flex items-center gap-x-2 bg-slate-200 rounded border-slate-400 relative">
+            <!-- <div class="px-4 py-2  flex items-center gap-x-2 bg-slate-200 rounded border-slate-400 relative">
                 <div class="absolute px-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-6">
@@ -43,6 +43,29 @@ defineProps({
                         class="text-end rounded bg-slate-50 border-slate-400 hover:bg-slate-600 px-3"
                         style="text-align:end;" id="" placeholder="Search students data">
                 </div>
+            </div> -->
+
+            <div class="flex items-center content-between">
+
+                <div class="px-4 py-2">
+                    <label class="input">
+                        <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none"
+                                stroke="currentColor">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.3-4.3"></path>
+                            </g>
+                        </svg>
+                        <input type="search" class="grow" placeholder="Search" />
+                        <kbd class="kbd kbd-sm">⌘</kbd>
+                        <kbd class="kbd kbd-sm">K</kbd>
+                    </label>
+                </div>
+
+                <div class="sm:mt-0 sm:ml-16 sm:flex-none">
+                    <Link as="link" :href="route('students.create')" class="btn btn-primary">Add Student</Link>
+                </div>
+
             </div>
 
             <div class="overflow-x-auto px-4 py-2">
