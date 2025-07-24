@@ -132,7 +132,9 @@ defineProps({
                                 <td>{{ student.section?.name }}</td>
                                 <td>{{ student.created_at }}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-soft btn-primary mr-1">Edit</button>
+                                    <Link :href="route('students.edit', student.id)"
+                                        class="btn btn-sm btn-soft btn-primary mr-1">
+                                    Edit</Link>
                                     <button class="btn btn-sm btn-soft btn-secondary">Delete</button>
                                 </td>
                             </tr>
