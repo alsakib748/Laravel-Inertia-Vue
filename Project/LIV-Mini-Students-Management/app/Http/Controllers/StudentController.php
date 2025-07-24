@@ -34,6 +34,7 @@ class StudentController extends Controller
         ]);
     }
 
+    // todo Student $student : Calls It Root model Bindning
     public function store(StoreStudentRequest $request)
     {
 
@@ -56,6 +57,14 @@ class StudentController extends Controller
     public function update(UpdateStudentRequest $request, Student $student)
     {
         $student->update($request->validated());
+
+        return redirect()->route('students.index');
+    }
+
+    // todo Student $student : Calls It Root model Bindning
+    public function destroy(Student $student)
+    {
+        $student->delete();
 
         return redirect()->route('students.index');
     }

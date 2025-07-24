@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { usePage, Link, Head } from "@inertiajs/vue3";
+import { usePage, Link, Head, useForm } from "@inertiajs/vue3";
 import MagnifyingGlass from "@/Components/Icons/MagnifyingGlass.vue";
 import Pagination from "@/Components/Pagination.vue";
 
@@ -12,6 +12,14 @@ defineProps({
 });
 
 // console.log(usePage().props.students);
+
+const deleteForm = useForm({});
+
+const deleteStudent = (studentId) => {
+    if (confirm('Are you sure you want to delete this student?')) {
+        deleteForm.delete(route('students.destroy', studentId));
+    }
+}
 
 </script>
 
@@ -135,7 +143,8 @@ defineProps({
                                     <Link :href="route('students.edit', student.id)"
                                         class="btn btn-sm btn-soft btn-primary mr-1">
                                     Edit</Link>
-                                    <button class="btn btn-sm btn-soft btn-secondary">Delete</button>
+                                    <button @click="deleteStudent(student.id)"
+                                        class="btn btn-sm btn-soft btn-secondary">Delete</button>
                                 </td>
                             </tr>
                         </tbody>
