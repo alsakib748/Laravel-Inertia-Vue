@@ -1,14 +1,37 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { usePage, Link, Head, useForm } from "@inertiajs/vue3";
+import { usePage, Link, Head, useForm, router } from "@inertiajs/vue3";
 import MagnifyingGlass from "@/Components/Icons/MagnifyingGlass.vue";
 import Pagination from "@/Components/Pagination.vue";
+import { ref, computed, watch } from 'vue';
 
 defineProps({
     students: {
         type: Object,
         required: true,
     }
+});
+
+let search = ref(usePage().props.search || ''), pageNumber = ref(1);
+
+let studentsUrl = computed(() => {
+    let url = new URL(route("students.index"));
+    url.searchParams.append('page', pageNumber.value);
+
+    if (search.value) {
+        url.searchParams.append("search", search.value);
+    }
+
+    return url;
+});
+
+watch(() => studentsUrl.value, (updatedStudentsUrl) => {
+    // console.log(newValue);
+    router.visit(updatedStudentsUrl, {
+        preserveScroll: true,
+        preserveState: true,
+        replace: true,
+    });
 });
 
 // console.log(usePage().props.students);
@@ -64,6 +87,8 @@ const deleteStudent = (studentId) => {
                 </div>
             </div> -->
 
+                <!-- {{ search }} -->
+
                 <div class="flex items-center content-between">
 
                     <div class="px-4 py-2">
@@ -75,7 +100,7 @@ const deleteStudent = (studentId) => {
                                     <path d="m21 21-4.3-4.3"></path>
                                 </g>
                             </svg>
-                            <input type="search" class="grow" placeholder="Search" />
+                            <input v-model="search" type="search" class="grow" placeholder="Search" />
                             <kbd class="kbd kbd-sm">⌘</kbd>
                             <kbd class="kbd kbd-sm">K</kbd>
                         </label>
