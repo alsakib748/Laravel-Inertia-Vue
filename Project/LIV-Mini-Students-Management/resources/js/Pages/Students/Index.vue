@@ -9,10 +9,14 @@ defineProps({
     students: {
         type: Object,
         required: true,
+    },
+    updatedPageNumber: {
+        type: Function,
+        return: true,
     }
 });
 
-let search = ref(usePage().props.search || ''), pageNumber = ref(1);
+let search = ref(usePage().props.search), pageNumber = ref(1);
 
 let studentsUrl = computed(() => {
     let url = new URL(route("students.index"));
@@ -25,6 +29,10 @@ let studentsUrl = computed(() => {
     return url;
 });
 
+const updatedPageNumber = (link) => {
+    pageNumber.value = link.url.split("=")[1];
+};
+
 watch(() => studentsUrl.value, (updatedStudentsUrl) => {
     // console.log(newValue);
     router.visit(updatedStudentsUrl, {
@@ -35,6 +43,18 @@ watch(() => studentsUrl.value, (updatedStudentsUrl) => {
 });
 
 // console.log(usePage().props.students);
+
+watch(() => search.value, (value) => {
+    if (value) {
+        pageNumber.value = 1;
+    }
+    // console.log(newValue);
+    // router.visit(updatedStudentsUrl, {
+    //     preserveScroll: true,
+    //     preserveState: true,
+    //     replace: true,
+    // });
+});
 
 const deleteForm = useForm({});
 
@@ -72,21 +92,6 @@ const deleteStudent = (studentId) => {
                     </div>
                 </div>
 
-                <!-- <div class="px-4 py-2  flex items-center gap-x-2 bg-slate-200 rounded border-slate-400 relative">
-                <div class="absolute px-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                    </svg>
-                </div>
-                <div class="">
-                    <input type="text" name=""
-                        class="text-end rounded bg-slate-50 border-slate-400 hover:bg-slate-600 px-3"
-                        style="text-align:end;" id="" placeholder="Search students data">
-                </div>
-            </div> -->
-
                 <!-- {{ search }} -->
 
                 <div class="flex items-center content-between">
@@ -113,37 +118,6 @@ const deleteStudent = (studentId) => {
                 </div>
 
                 <div class="overflow-x-auto px-4 py-2">
-                    <!-- <table class="min-w-full rounded-lg shadow-md bg-white">
-                    <thead>
-                        <tr class="bg-gradient-to-r from-indigo-600 to-blue-400">
-                            <th
-                                class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-black rounded-tl-lg">
-                                Song</th>
-                            <th class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-black">Artist
-                            </th>
-                            <th
-                                class="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-black rounded-tr-lg">
-                                Year</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="bg-white hover:bg-blue-50 transition">
-                            <td class="px-6 py-4 whitespace-nowrap">The Sliding Mr. Bones (Next Stop, Pottersville)</td>
-                            <td class="px-6 py-4 whitespace-nowrap">Malcolm Lockyer</td>
-                            <td class="px-6 py-4 whitespace-nowrap">1961</td>
-                        </tr>
-                        <tr class="bg-gray-50 hover:bg-blue-50 transition">
-                            <td class="px-6 py-4 whitespace-nowrap">Witchy Woman</td>
-                            <td class="px-6 py-4 whitespace-nowrap">The Eagles</td>
-                            <td class="px-6 py-4 whitespace-nowrap">1972</td>
-                        </tr>
-                        <tr class="bg-white hover:bg-blue-50 transition">
-                            <td class="px-6 py-4 whitespace-nowrap">Shining Star</td>
-                            <td class="px-6 py-4 whitespace-nowrap">Earth, Wind, and Fire</td>
-                            <td class="px-6 py-4 whitespace-nowrap">1975</td>
-                        </tr>
-                    </tbody>
-                </table> -->
                     <table class="table table-zebra w-full text-center">
                         <thead>
                             <tr>
@@ -178,7 +152,7 @@ const deleteStudent = (studentId) => {
 
                 <br />
 
-                <Pagination :data="students" />
+                <Pagination :data="students" :updatedPageNumber="updatedPageNumber" />
 
                 <br />
 
