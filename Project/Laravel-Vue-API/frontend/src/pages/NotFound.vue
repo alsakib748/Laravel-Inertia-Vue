@@ -4,7 +4,7 @@
 
 <template>
 
-  <RouterView />
+    <h1 class="">Page Not Found</h1>
 
 </template>
 

@@ -4,7 +4,7 @@
 
 <template>
 
-  <RouterView />
+    MyImages
 
 </template>
 
