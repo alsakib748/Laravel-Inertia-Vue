@@ -1,12 +1,17 @@
 <script setup>
+import axiosClient from '../axios';
+import { ref, onMounted } from 'vue';
 
-const images = [
 
-    { id: 1, label: 'Test 1', url: 'http://localhost:8000' },
-    { id: 2, label: 'Test 2', url: 'http://localhost:8000' },
-    { id: 3, label: 'Test 3', url: 'http://localhost:8000' },
+const images = ref([]);
 
-];
+onMounted(() => {
+    axiosClient.get('/api/image')
+        .then((response) => {
+            console.log(response.data);
+            images.value = response.data;
+        });
+});
 
 </script>
 

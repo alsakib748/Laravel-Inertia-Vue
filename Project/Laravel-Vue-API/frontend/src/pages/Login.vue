@@ -4,21 +4,33 @@ import { RouterLink } from 'vue-router';
 import axiosClient from '../axios.js';
 import router from "../router.js";
 import { ref } from "vue";
+import useUserStore from '../store/user.js';
 
 const data = ref({
     email: '',
     password: '',
 });
 
-function submit() {
+const errorMessage = ref('');
+const userStore = useUserStore();
 
+function submit() {
     axiosClient.get('/sanctum/csrf-cookie').then(response => {
         axiosClient.post("/login", data.value)
             .then(response => {
-                router.push({ name: 'Home' })
+                // Update user store after successful login
+                userStore.fetchUser().then(() => {
+                    router.push({ name: 'Home' });
+                }).catch(error => {
+                    console.error('Error fetching user after login:', error);
+                    router.push({ name: 'Home' });
+                });
+            })
+            .catch(error => {
+                console.log(error.response);
+                errorMessage.value = error.response?.data?.message || 'Login failed';
             });
     });
-
 }
 
 </script>
@@ -27,6 +39,9 @@ function submit() {
 
     <GuestLayout>
         <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Sign in to your account</h2>
+        <div v-if="errorMessage" class="py-2 px-3 rounded text-white bg-red-400 mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            {{ errorMessage }}
+        </div>
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form @submit.prevent="submit" class="space-y-6" action="#" method="POST">
                 <div>

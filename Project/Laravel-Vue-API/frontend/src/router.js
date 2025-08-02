@@ -6,6 +6,7 @@ import MyImages from "./pages/MyImages.vue";
 import Login from "./pages/Login.vue";
 import Signup from "./pages/Signup.vue";
 import NotFound from "./pages/NotFound.vue";
+import useUserStore from "./store/user";
 
 const routes = [
   {
@@ -14,7 +15,21 @@ const routes = [
     children: [
       { path: "/", name: "Home", component: Home },
       { path: "/images", name: "MyImages", component: MyImages }
-    ]
+    ],
+    beforeEnter: async (to, from, next) => {
+      try {
+        const userStore = useUserStore();
+        // Only fetch user if not already loaded
+        if (!userStore.user) {
+          await userStore.fetchUser();
+        }
+        next();
+      } catch (error) {
+        console.log("Failed to fetch user data: ", error);
+        // Redirect to login if authentication fails
+        next({ name: "Login" });
+      }
+    }
   },
   {
     path: "/login",

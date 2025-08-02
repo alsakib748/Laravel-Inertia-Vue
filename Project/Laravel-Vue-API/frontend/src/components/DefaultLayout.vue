@@ -26,7 +26,9 @@
                                     class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800">
                                     <span class="absolute -inset-1.5" />
                                     <span class="sr-only">Open user menu</span>
-                                    <img class="size-8 rounded-full" :src="user.imageUrl" alt="" />
+                                    <img class="size-8 rounded-full"
+                                        src="https://randomuser.me/api/portraits/women/67.jpg" alt="" />
+                                    <span class="text-white ml-3">{{ user.name }}</span>
                                 </MenuButton>
 
                                 <transition enter-active-class="transition ease-out duration-100"
@@ -71,7 +73,9 @@
                 <div class="border-t border-gray-700 pt-4 pb-3">
                     <div class="flex items-center px-5">
                         <div class="shrink-0">
-                            <img class="size-10 rounded-full" :src="user.imageUrl" alt="" />
+                            <img class="size-10 rounded-full" src="https://randomuser.me/api/portraits/women/67.jpg"
+                                alt="" />
+                            <!-- <span class="text-white ml-3">{{ user.name }}</span> -->
                         </div>
                         <div class="ml-3">
                             <div class="text-base/5 font-medium text-white">{{ user.name }}</div>
@@ -99,13 +103,13 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
 import axiosClient from '../axios.js';
 
 import router from "../router.js";
+import useUserStore from '../store/user.js';
+import { computed } from 'vue';
 
-const user = {
-    name: 'Tom Cook',
-    email: 'tom@example.com',
-    imageUrl:
-        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
+const userStore = useUserStore();
+
+const user = computed(() => userStore.user);
+
 const navigation = [
     { name: 'Upload', to: { name: 'Home' } },
     { name: 'My Images', to: { name: 'MyImages' } },

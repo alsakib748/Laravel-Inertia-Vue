@@ -3,6 +3,8 @@ import axiosClient from '../axios';
 import GuestLayout from '../components/GuestLayout.vue';
 import { RouterLink } from 'vue-router';
 import { ref } from 'vue';
+import router from '../router.js';
+import useUserStore from '../store/user.js';
 
 const data = ref({
     name: '',
@@ -11,38 +13,79 @@ const data = ref({
     password_confirmation: '',
 });
 
+const errors = ref({
+    name: [],
+    email: [],
+    password: [],
+});
+
+const errorMessage = ref('');
+const userStore = useUserStore();
+
 function submit() {
+    // Clear previous errors
+    errors.value = {
+        name: [],
+        email: [],
+        password: [],
+    };
+    errorMessage.value = '';
 
     axiosClient.get('/sanctum/csrf-cookie').then(response => {
-        axiosClient.post('/register', data.value);
+        axiosClient.post("/register", data.value)
+            .then(response => {
+                // Update user store after successful registration
+                userStore.fetchUser().then(() => {
+                    router.push({ name: 'Home' });
+                }).catch(error => {
+                    console.error('Error fetching user after registration:', error);
+                    router.push({ name: 'Home' });
+                });
+            })
+            .catch(error => {
+                console.log('Registration error:', error);
+                if (error.response?.data?.errors) {
+                    errors.value = error.response.data.errors;
+                } else {
+                    errorMessage.value = error.response?.data?.message || 'Registration failed';
+                }
+            });
     });
-
 }
 
 </script>
 
 <template>
 
-    {{ data }}
+    <!-- {{ data }} -->
 
     <GuestLayout>
         <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Create new Account</h2>
+        <div v-if="errorMessage" class="py-2 px-3 rounded text-white bg-red-400 mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            {{ errorMessage }}
+        </div>
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form @submit.prevent="submit" class="space-y-4">
                 <div>
                     <label for="email" class="block text-sm/6 font-medium text-gray-900">Full Name</label>
                     <div class="mt-2">
-                        <input v-model="data.name" type="name" name="name" id="name" required=""
+                        <input v-model="data.name" type="name" name="name" id="name"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
+
                     </div>
+                    <p class="text-sm text-red-600 mt-1">
+                        {{ errors.name ? errors.name[0] : '' }}
+                    </p>
                 </div>
                 <div>
                     <label for="email" class="block text-sm/6 font-medium text-gray-900">Email address</label>
                     <div class="mt-2">
                         <input v-model="data.email" type="email" name="email" id="email" autocomplete="email"
-                            required=""
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                     </div>
+                    <p class="text-sm text-red-600 mt-1">
+                        {{ errors.email ? errors.email[0] : '' }}
+                    </p>
                 </div>
 
                 <div>
@@ -51,9 +94,12 @@ function submit() {
                     </div>
                     <div class="mt-2">
                         <input v-model="data.password" type="password" name="password" id="password"
-                            autocomplete="current-password" required=""
+                            autocomplete="current-password"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                     </div>
+                    <p class="text-sm text-red-600 mt-1">
+                        {{ errors.password ? errors.password[0] : '' }}
+                    </p>
                 </div>
 
                 <div>
@@ -63,7 +109,7 @@ function submit() {
                     </div>
                     <div class="mt-2">
                         <input v-model="data.password_confirmation" type="password" name="password"
-                            id="passwordConfirmation" required=""
+                            id="passwordConfirmation"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" />
                     </div>
                 </div>
